@@ -31,10 +31,10 @@
 #define EE_HANDS
 
 // encoders
-#define ENCODERS_PAD_A { B4 }
-#define ENCODERS_PAD_B { B5 }
-#define ENCODERS_PAD_A_RIGHT { B5 }
-#define ENCODERS_PAD_B_RIGHT { B4 }
+#define ENCODERS_PAD_A { B5 } // Overridden in Kangoo denfinition
+#define ENCODERS_PAD_B { B4 } // Overridden in Kangoo denfinition
+#define ENCODERS_PAD_A_RIGHT { B4 }
+#define ENCODERS_PAD_B_RIGHT { B5 }
 
 // OLED driver
 #ifdef OLED_DRIVER_ENABLE
@@ -54,7 +54,7 @@
         { 18, 18 }
   #define RGBLIGHT_SPLIT
   #define RGBLIGHT_LIMIT_VAL 150
-  #define RGBLIGHT_HUE_STEP 10
+  //#define RGBLIGHT_HUE_STEP 10 // Overridden in Kangoo denition
   #define RGBLIGHT_SAT_STEP 17
   #define RGBLIGHT_VAL_STEP 17
   #define RGBLIGHT_SLEEP
