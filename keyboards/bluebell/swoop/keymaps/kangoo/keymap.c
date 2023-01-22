@@ -1,6 +1,10 @@
 #include QMK_KEYBOARD_H
 //#include "keymap_czech.h"
 
+// Adding the Layer Lock feature: https://getreuer.info/posts/keyboards/layer-lock/index.html
+#include "features/layer_lock.h"
+
+
 // NOTE: Using timers here: https://github.com/qmk/qmk_firmware/blob/master/docs/feature_macros.md at the end.
 
 
@@ -56,7 +60,8 @@ enum layers {
 #define CEGR RSA(KC_E)
 
 enum custom_keycodes {
-    MY_PDOT = SAFE_RANGE,
+    LAYER_LOCK = SAFE_RANGE,
+    MY_PDOT,
     MY_COMM,
     MY_AMPR,
     MY_PIPE,
@@ -220,24 +225,24 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
          KC_DEL,         KC_HOME,           KC_UP,          KC_END,         KC_PGUP,               KC_DEL,         KC_HOME,            KC_UP,          KC_END,         KC_PGUP, 
   LALT(KC_BSPC), LGUI_T(KC_LEFT), LCTL_T(KC_DOWN), LSFT_T(KC_RGHT),         KC_PGDN,              KC_BSPC,         KC_LEFT,          KC_DOWN,         KC_RGHT,         KC_PGDN, 
          KC_CUT,         KC_COPY,         KC_PSTE,         KC_UNDO,        KC_AGAIN,               KC_CUT,         KC_COPY,          KC_PSTE,         KC_UNDO,        KC_AGAIN, 
-                                          KC_PSCR,         KC_PAUS, _______________,               KC_ESC, _______________,          KC_SCRL
+                                          KC_PSCR,         KC_PAUS,       TO(_BASE),               KC_ESC, _______________,          KC_SCRL
 ),                                                                           
 [_NUM] = LAYOUT_split_3x5_3(
         KC_ASTR,         KC_SLSH,         KC_LCBR,         KC_RCBR,           KC_GT,              MY_AMPR,           KC_P3,            KC_P4,           KC_P5,           KC_P6, 
 LALT_T(KC_PPLS), LGUI_T(KC_MINS), LCTL_T(KC_LBRC), LSFT_T(KC_RBRC),           KC_LT,              MY_PIPE,           KC_P0,            KC_P1,           KC_P2,         MY_PDOT, 
         KC_CIRC,         KC_BSLS,         KC_LPRN,         KC_RPRN,         KC_PERC,              MY_EXLM,           KC_P7,            KC_P8,           KC_P9,         MY_COMM, 
-                                         TG(_NUM), _______________,        TG(_NAV),       _______________,          KC_EQL, _______________
+                                       LAYER_LOCK, _______________,        TO(_NAV),       _______________,          KC_EQL, _______________
 ),                          
 /* DM_REC1 & 2 start recording of one of two available dynamic macros.
  * DM_RSTP stops recording of the macro(s).
  * DM_PLY1 & 2 replay the dynamic macros.
- */
+ */      
 [_FNC] = LAYOUT_split_3x5_3(
           KC_F6,           KC_F5,           KC_F4,           KC_F3,         DM_REC1,                KC_INS,           KC_F3,           KC_F4,           KC_F5,           KC_F6, 
   LALT_T(KC_F2),  LGUI_T(KC_F12),  LCTL_T(KC_F11),  LSFT_T(KC_F10),         DM_REC2,               KC_CAPS,          KC_F10,          KC_F11,          KC_F12,           KC_F2, 
           KC_F1,           KC_F9,           KC_F8,           KC_F7,         DM_RSTP,               CW_TOGG,           KC_F7,           KC_F8,           KC_F9,           KC_F1, 
-                                        TO(_BASE),        TG(_FNC),         QK_LEAD,               DM_PLY1,         DM_PLY2, _______________
-),      
+                                        TO(_BASE),      LAYER_LOCK,         QK_LEAD,               DM_PLY1,         DM_PLY2, _______________
+),   
   /*
     * LAYER 4: Symbols
     *              _____                                                   _____
@@ -258,7 +263,7 @@ LALT_T(KC_PPLS), LGUI_T(KC_MINS), LCTL_T(KC_LBRC), LSFT_T(KC_RBRC),           KC
       X(CZ_PGF),       X(CZ_EUR),       X(CZ_CAR),       X(CZ_HAC),         KC_TILD,       XP(CZ_N, CZ_NU), XP(CZ_C, CZ_CU),XP(CZ_EH, CZ_EHU),XP(CZ_S, CZ_SU), XP(CZ_D, CZ_DU), 
         KC_UNDS,          KC_DLR,         KC_HASH,         KC_LSFT,           KC_AT,     XP(CZ_UK, CZ_UKU), XP(CZ_A, CZ_AU), XP(CZ_E, CZ_EU), XP(CZ_I, CZ_IU), XP(CZ_O, CZ_OU), 
      X(GR_BETA),       X(CZ_PND),      X(GR_OMEG),       X(GR_MJU),          KC_GRV,       XP(CZ_U, CZ_UU), XP(CZ_R, CZ_RU), XP(CZ_Y, CZ_YU), XP(CZ_Z, CZ_ZU), XP(CZ_T, CZ_TU), 
-                                        TG(_BASE),         KC_DQUO,         KC_QUOT,       _______________,        TG(_RGB), _______________
+                                        TO(_BASE),         KC_DQUO,         KC_QUOT,       _______________,        TO(_RGB), _______________
 ),   
 
 // // Manual version:
@@ -266,20 +271,20 @@ LALT_T(KC_PPLS), LGUI_T(KC_MINS), LCTL_T(KC_LBRC), LSFT_T(KC_RBRC),           KC
 //          CZ_PGF,          CZ_EUR,          CZ_CAR,          CZ_HAC,         KC_TILD,                    CZ_N,            CZ_C,           CZ_EH,             CZ_S,        CZ_D, 
 //         KC_UNDS,          KC_DLR,         KC_HASH,         KC_LSFT,           KC_AT,                   CZ_UK,            CZ_A,            CZ_E,             CZ_I,        CZ_O, 
 //         GR_BETA,          CZ_PND,         GR_OMEG,          GR_MJU, xxxxxxxxxxxxxxx,                    CZ_U,            CZ_R,            CZ_Y,             CZ_Z,        CZ_T, 
-//                                            KC_GRV,         KC_DQUO,         KC_QUOT,         xxxxxxxxxxxxxxx,           TG(6), xxxxxxxxxxxxxxx
+//                                            KC_GRV,         KC_DQUO,         KC_QUOT,         xxxxxxxxxxxxxxx,           TO(6), xxxxxxxxxxxxxxx
 // ),       
 // [_SYM] = LAYOUT_split_3x5_3(
 // xxxxxxxxxxxxxxx, xxxxxxxxxxxxxxx, xxxxxxxxxxxxxxx, xxxxxxxxxxxxxxx,         KC_TILD,       xxxxxxxxxxxxxxx, xxxxxxxxxxxxxxx,xxxxxxxxxxxxxxx,xxxxxxxxxxxxxxx, xxxxxxxxxxxxxxx, 
 //         KC_UNDS,          KC_DLR,         KC_HASH,         KC_LSFT,           KC_AT,       xxxxxxxxxxxxxxx, xxxxxxxxxxxxxxx, xxxxxxxxxxxxxxx, xxxxxxxxxxxxxxx, xxxxxxxxxxxxxxx, 
 // xxxxxxxxxxxxxxx, xxxxxxxxxxxxxxx, xxxxxxxxxxxxxxx,xxxxxxxxxxxxxxx, xxxxxxxxxxxxxxx,        xxxxxxxxxxxxxxx, xxxxxxxxxxxxxxx, xxxxxxxxxxxxxxx, xxxxxxxxxxxxxxx, xxxxxxxxxxxxxxx, 
-//                                            KC_GRV,         KC_DQUO,         KC_QUOT,       xxxxxxxxxxxxxxx,           TG(6), xxxxxxxxxxxxxxx
+//                                            KC_GRV,         KC_DQUO,         KC_QUOT,       xxxxxxxxxxxxxxx,           TO(6), xxxxxxxxxxxxxxx
 // ),                              
 
 [_APP] = LAYOUT_split_3x5_3(
         KC_ACL1,         KC_WH_L,         KC_MS_U,         KC_WH_R,         KC_WH_U,               KC_MYCM,         KC_EXEC,         KC_CALC,         KC_MAIL,          KC_PWR, 
         KC_ACL0,         KC_MS_L,         KC_MS_D,         KC_MS_R,         KC_WH_D,               KC_LSFT,         KC_WBAK,         KC_WFWD,         KC_WREF,         KC_SLEP, 
         KC_ACL2,          KC_CUT,         KC_COPY,         KC_PSTE, xxxxxxxxxxxxxxx,               KC_MUTE,         KC_MPRV,         KC_MNXT,         KC_WFAV, xxxxxxxxxxxxxxx, 
-                                          KC_BTN3,         KC_BTN2,         KC_BTN1,             TG(_BASE), xxxxxxxxxxxxxxx, _______________
+                                          KC_BTN3,         KC_BTN2,         KC_BTN1,             TO(_BASE), xxxxxxxxxxxxxxx, _______________
 ),
 /* PB_X are programmable buttons. These are programmable within the host operating system: https://docs.qmk.fm/#/feature_programmable_button
  *
@@ -288,7 +293,7 @@ LALT_T(KC_PPLS), LGUI_T(KC_MINS), LCTL_T(KC_LBRC), LSFT_T(KC_RBRC),           KC
         RGB_M_P,         RGB_M_B,         RGB_M_R,        RGB_M_SW,        RGB_M_SN,              RGB_RMOD,         RGB_SAI,         RGB_SAD, xxxxxxxxxxxxxxx,          KC_PWR, 
         RGB_M_T,         RGB_M_G,         RGB_M_X,         RGB_M_K, xxxxxxxxxxxxxxx,               RGB_MOD,         RGB_HUI,         RGB_HUD,         RGB_SPI,         RGB_SPD, 
 xxxxxxxxxxxxxxx, xxxxxxxxxxxxxxx, xxxxxxxxxxxxxxx, xxxxxxxxxxxxxxx, xxxxxxxxxxxxxxx,               RGB_TOG,         RGB_VAI,         RGB_VAD, xxxxxxxxxxxxxxx,         KC_SLEP, 
-                                  xxxxxxxxxxxxxxx,        TG(_APP),        TG(_SYM),             TO(_BASE),        TG(_RGB), _______________
+                                  xxxxxxxxxxxxxxx,        TO(_APP),        TO(_SYM),             TO(_BASE),        TG(_RGB), _______________
 )                                                                                                  
 };   
 
@@ -697,6 +702,11 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 bool process_record_user(uint16_t keycode, keyrecord_t* record) {
     //static uint16_t layer_exit_timer;
     static bool bExitLayer;
+
+    // The layer lock feature: https://getreuer.info/posts/keyboards/layer-lock/index.html
+    if (!process_layer_lock(keycode, record, LAYER_LOCK)) { 
+        return false; 
+    }
 
     // rgblight_sethsv_at(HSV_BLUE, 0);
     // rgblight_sethsv_at(HSV_BLUE, 19);
